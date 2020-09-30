@@ -44,7 +44,7 @@ while True:
     score = calculate_similarity_score(pred, frame_pred)
     s = "No Face Detected..."
     if score < FACE_SCORE:
-        s = "Welcome!"
+        s = "Face Detected!"
     frame = cv2.putText(frame, s, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 0), 1)
     cv2.imshow("Face Verification",frame)
 
