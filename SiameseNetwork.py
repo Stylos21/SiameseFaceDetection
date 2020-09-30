@@ -9,7 +9,7 @@ from keras_preprocessing.image import img_to_array
 DOWNSCALE_FACTOR = 3
 FACE_SCORE = 20
 
-img = cv2.imread("./image.png")
+img = cv2.imread("./image.png") # Image is not in the repository.
 img = img_to_array(img)
 img = np.reshape(img, (-1, 720, 1280, 3))
 
