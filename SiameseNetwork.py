@@ -7,7 +7,7 @@ from keras_preprocessing.image import img_to_array
 
 # Define Constants
 DOWNSCALE_FACTOR = 3
-FACE_SCORE = 20
+FACE_SCORE = 10
 
 img = cv2.imread("./image.png") # Image is not in the repository.
 img = img_to_array(img)
@@ -24,16 +24,12 @@ model.add(Flatten())
 model.add(Dense(128, activation="sigmoid"))
 pred = model.predict(img)
 
-
 # Function to calculate similarity score (sum of element-wise difference squared)
 def calculate_similarity_score(arr1, arr2):
     if len(arr1) != len(arr2):
         raise Exception(f"You passed two arrays that do not have the same length. Length of first array: {len(arr1)}. Length of second array: {len(arr2)}")
     else:
-        loss = 0.0
-        for id in range(len(arr1[0])):
-            loss += ((arr2[0][id] - arr1[0][id])**2) - DOWNSCALE_FACTOR
-        return ceil(loss)
+        return (sum(arr2[0]) - sum(arr1[0]))**2
 
 # Initialize camera, and start detecting
 cap = cv2.VideoCapture(0)
@@ -42,13 +38,14 @@ while True:
     f = np.reshape(frame, (-1, 720, 1280, 3))
     frame_pred = model.predict(f)
     score = calculate_similarity_score(pred, frame_pred)
+    print(score)
     s = "No Face Detected..."
     if score < FACE_SCORE:
         s = "Face Detected!"
     frame = cv2.putText(frame, s, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 0), 1)
     cv2.imshow("Face Verification",frame)
 
-    print(score, s)
+    # print(score, s)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
